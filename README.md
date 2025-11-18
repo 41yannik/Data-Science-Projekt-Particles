@@ -9,7 +9,7 @@ Particle Life Simulator
 
 ---
 
-## 📖 Project Overview
+## Project Overview
 
 The **Particle Life Simulator** is an agent-based simulation engine designed to demonstrate how complex, organic-looking patterns (cellular structures, gliders, clusters) emerge from chaos without central orchestration.
 
