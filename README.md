@@ -36,8 +36,8 @@ This project aims to deliver a production-grade Python application focusing on a
 * **Stack:** Utilization of **NumPy** for vectorized operations and potential JIT compilation via **Numba** to bypass Python interpreter overhead[cite: 59, 102].
 
 ### 3. Visualization
-* [Real-time] rendering pipeline (evaluated: `Vispy` vs `Pygame`)[cite: 106, 111].
-* [cite_start]**GUI Controls:** Dynamic adjustment of interaction parameters (gravity, friction, range) during runtime[cite: 42].
+* Real-time rendering pipeline (evaluated: `Vispy` vs `Pygame`)[cite: 106, 111].
+* **GUI Controls:** Dynamic adjustment of interaction parameters (gravity, friction, range) during runtime[cite: 42].
 
 ### 4. Software Quality (QA/Ops)
 * **CI/CD:** GitHub Actions pipeline for automated linting (`pylint`/`flake8`) and testing[cite: 49].
