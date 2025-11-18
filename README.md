@@ -26,20 +26,20 @@ The system simulates thousands of particles categorized into distinct types (col
 This project aims to deliver a production-grade Python application focusing on algorithmic efficiency and clean software architecture.
 
 ### 1. Core Simulation Engine
-* **Interaction Matrix:** Implementation of an $N \times N$ matrix defining forces between at least **4 distinct particle types**[cite: 36].
-* **Physics Logic:** Time-stepped calculation of velocity, friction, and acceleration based on distance thresholds ($r_{min}$, $r_{max}$)[cite: 33, 38, 39].
+* **Interaction Matrix:** Implementation of an $N \times N$ matrix defining forces between at least **4 distinct particle types**.
+* **Physics Logic:** Time-stepped calculation of velocity, friction, and acceleration based on distance thresholds ($r_{min}$, $r_{max}$).
 * **Boundary Conditions:** Toroidal wrapping or reflective boundaries (implementation pending).
 
 ### 2. Performance Engineering
-* **Optimization Target:** Real-time rendering of **>2,000 particles** at 60 FPS[cite: 40].
-* **Profiling:** Continuous bottleneck analysis using `cProfile` and `timeit`[cite: 57].
-* **Stack:** Utilization of **NumPy** for vectorized operations and potential JIT compilation via **Numba** to bypass Python interpreter overhead[cite: 59, 102].
+* **Optimization Target:** Real-time rendering of **>2,000 particles** at 60 FPS.
+* **Profiling:** Continuous bottleneck analysis using `cProfile` and `timeit`.
+* **Stack:** Utilization of **NumPy** for vectorized operations and potential JIT compilation via **Numba** to bypass Python interpreter overhead.
 
 ### 3. Visualization
-* Real-time rendering pipeline (evaluated: `Vispy` vs `Pygame`)[cite: 106, 111].
-* **GUI Controls:** Dynamic adjustment of interaction parameters (gravity, friction, range) during runtime[cite: 42].
+* Real-time rendering pipeline (evaluated: `Vispy` vs `Pygame`).
+* **GUI Controls:** Dynamic adjustment of interaction parameters (gravity, friction, range) during runtime.
 
 ### 4. Software Quality (QA/Ops)
-* **CI/CD:** GitHub Actions pipeline for automated linting (`pylint`/`flake8`) and testing[cite: 49].
-* **Testing Strategy:** Unit testing suite using `pytest` targeting >70% code coverage[cite: 48].
+* **CI/CD:** GitHub Actions pipeline for automated linting (`pylint`/`flake8`) and testing.
+* **Testing Strategy:** Unit testing suite using `pytest` targeting >70% code coverage.
 * **Standards:** Strict adherence to PEP-8 and Type Hinting.
