@@ -48,30 +48,7 @@ This project aims to deliver a production-grade Python application focusing on a
 
 The system is designed with a clear separation of concerns, orchestrated by a central controller (`main.py`) which manages the flow between configuration, simulation logic, and visualization.
 
-```mermaid
-graph TD
-    A[Main Controller (main.py)] --> B[Configuration & Rules (config.py)]
-    A --> C[Simulation Engine (simulation.py)]
-    A --> D[Visualization / GUI (viewer.py)]
 
-    B -- Provides Data --> C
-    C -- Provides State --> D
-
-    subgraph Configuration & Rules
-        B_sub1(Colors)
-        B_sub2(Interaction Matrix)
-    end
-
-    subgraph Simulation Engine
-        C_sub1(Particles Class)
-        C_sub2(Update Loop (NumPy))
-    end
-
-    subgraph Visualization / GUI
-        D_sub1(Vispy / Pygame)
-        D_sub2(Draw Particles)
-    end
-```
 
 ### Module Breakdown:
 
