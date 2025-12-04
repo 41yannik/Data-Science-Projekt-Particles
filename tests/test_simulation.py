@@ -1,5 +1,6 @@
 from particle_life.simulation import ParticleSystem
 
+
 def test_create_system():
     """
     Ein einfacher Test, der prüft, ob wir das System erstellen können.
