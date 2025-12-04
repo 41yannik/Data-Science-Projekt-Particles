@@ -1,3 +1,14 @@
+import sys
+import os
+
+# --- Der Hack: Wir zeigen Python den Weg zum Hauptordner ---
+# Wir sagen: "Nimm den Pfad dieser Datei, geh einen Schritt zurück (..),
+# und such dort nach Modulen."
+current_dir = os.path.dirname(__file__)
+parent_dir = os.path.join(current_dir, '..')
+sys.path.insert(0, os.path.abspath(parent_dir))
+# -----------------------------------------------------------
+
 from particle_life.simulation import ParticleSystem
 
 
