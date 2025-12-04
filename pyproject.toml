@@ -78,3 +78,7 @@ extend-select = ["E", "I"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["particle_life"]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+testpaths = ["tests"]
