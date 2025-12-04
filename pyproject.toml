@@ -30,6 +30,7 @@ name = "particle_life"
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.8"
 version = "0.1.0"
+
 [tool.setuptools]
 packages = ["particle_life"]
 
@@ -72,8 +73,11 @@ pythonpath = "."
 testpaths = ["tests"]
 
 [tool.ruff]
-# Standard-Einstellungen für den Linter
+# Allgemeine Einstellungen
 line-length = 88
 target-version = "py310"
+
+[tool.ruff.lint]
+# HIER IST DIE ÄNDERUNG: Regeln kommen jetzt in diesen Unterabschnitt
 select = ["E", "F", "I"]
 ignore = []

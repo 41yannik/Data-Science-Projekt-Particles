@@ -4,52 +4,54 @@ Core simulation module.
 
 import numpy as np
 
+# Wir importieren unsere neue Config-Datei
+import particle_life.config as config
+
 
 class ParticleSystem:
     """
-    Diese Klasse verwaltet alle Partikel.
-    Anstatt 2000 einzelne Objekte zu erstellen (was langsam ist),
-    speichern wir alles in großen Tabellen (Arrays).
+    Verwaltet die Partikel-Daten und die Regeln (Matrix).
     """
 
-    def __init__(self, n_particles, n_types, width, height):
+    def __init__(self):
         """
-        Erstellt das System.
-
-        Parameter:
-        - n_particles: Anzahl der Teilchen (z.B. 1000)
-        - n_types: Anzahl der Farben/Typen (z.B. 4)
-        - width: Breite des Fensters
-        - height: Höhe des Fensters
+        Initialisiert das System mit Werten aus der config.py.
         """
-        self.n_particles = n_particles
-        self.n_types = n_types
-        self.width = width
-        self.height = height
+        self.n_particles = config.PARTICLE_COUNT
+        self.n_types = config.PARTICLE_TYPES
+        self.width = config.WINDOW_WIDTH
+        self.height = config.WINDOW_HEIGHT
 
-        # --- 1. Positionen ---
-        # Wir erstellen eine Tabelle mit Zufallszahlen zwischen 0 und 1.
-        # Format: (Anzahl, 2). Das heißt: 1000 Zeilen, 2 Spalten (X und Y).
-        # dtype=np.float32 spart Speicher und ist schneller auf deinem M2 Chip.
-        self.positions = np.random.rand(n_particles, 2).astype(np.float32)
+        # --- 1. Positionen & Geschwindigkeiten ---
+        # Zufällige Positionen auf dem Bildschirm
+        self.positions = np.random.rand(self.n_particles, 2).astype(np.float32)
+        self.positions[:, 0] *= self.width
+        self.positions[:, 1] *= self.height
 
-        # Wir strecken die Zufallszahlen (0 bis 1) auf die Bildschirmgröße
-        self.positions[:, 0] *= width  # X-Koordinaten mal Breite
-        self.positions[:, 1] *= height  # Y-Koordinaten mal Höhe
+        # Startgeschwindigkeit ist 0
+        self.velocities = np.zeros((self.n_particles, 2), dtype=np.float32)
 
-        # --- 2. Geschwindigkeiten ---
-        # Am Anfang bewegen sich die Teilchen nicht. Wir füllen alles mit 0.
-        self.velocities = np.zeros((n_particles, 2), dtype=np.float32)
+        # --- 2. Typen (Farben) ---
+        # Zufällige Zuordnung der Typen (0 bis n_types-1)
+        self.types = np.random.randint(
+            0, self.n_types, size=self.n_particles, dtype=np.int32
+        )
 
-        # --- 3. Farben / Typen ---
-        # Jeder Partikel bekommt eine zufällige Zahl als Typ (z.B. 0, 1, 2 oder 3).
-        # Das bestimmt später die Farbe (Rot, Grün, Blau, Gelb).
-        self.types = np.random.randint(0, n_types, size=n_particles, dtype=np.int32)
+        # --- 3. Die Interaktions-Matrix (Das Regelwerk) ---
+        # Eine Tabelle (Größe: Typen x Typen) mit Werten zwischen -1 und 1.
+        # Beispiel: matrix[0][1] = 0.5 bedeutet: Typ 0 wird von Typ 1 angezogen.
+        self.interaction_matrix = np.random.uniform(
+            -1, 1, (self.n_types, self.n_types)
+        ).astype(np.float32)
 
     def get_positions(self):
-        """Gibt die Tabelle mit den Positionen zurück."""
+        """Gibt die Positionen zurück."""
         return self.positions
 
     def get_types(self):
-        """Gibt die Liste der Typen zurück."""
+        """Gibt die Typen zurück."""
         return self.types
+
+    def get_rules(self):
+        """Gibt die Matrix zurück (zum Debuggen)."""
+        return self.interaction_matrix
