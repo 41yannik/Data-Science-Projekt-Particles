@@ -25,7 +25,9 @@ class ParticleSystem:
         Parameter können für Tests überschrieben werden, ansonsten werden
         Standardwerte aus der config.py verwendet.
         """
-        self.n_particles = n_particles if n_particles is not None else config.PARTICLE_COUNT
+        self.n_particles = (
+            n_particles if n_particles is not None else config.PARTICLE_COUNT
+        )
         self.n_types = n_types if n_types is not None else config.PARTICLE_TYPES
         self.width = width if width is not None else config.WINDOW_WIDTH
         self.height = height if height is not None else config.WINDOW_HEIGHT
