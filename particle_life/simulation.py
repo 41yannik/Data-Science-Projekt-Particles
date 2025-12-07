@@ -55,6 +55,14 @@ class ParticleSystem:
             -1, 1, (self.n_types, self.n_types)
         ).astype(np.float32)
 
+        # Vorallocierte Puffer für O(N²)-Berechnungen (Performance)
+        self._disp = np.empty((self.n_particles, self.n_particles, 2), dtype=np.float32)
+        self._dist2 = np.empty((self.n_particles, self.n_particles), dtype=np.float32)
+        self._within = np.empty((self.n_particles, self.n_particles), dtype=bool)
+        self._force_dir = np.empty_like(self._disp)
+        self._force_mag = np.empty_like(self._dist2)
+        self._total_force = np.empty((self.n_particles, 2), dtype=np.float32)
+
     def update(self, dt: float | None = None) -> None:
         """
         Aktualisiert Positionen und Geschwindigkeiten für einen Zeitschritt.
@@ -62,20 +70,58 @@ class ParticleSystem:
         Args:
             dt: Zeitschritt. Wenn None wird config.DT verwendet.
         """
-
         if dt is None:
             dt = config.DT
 
         dt = np.float32(dt)
         friction = np.float32(self.friction)
+        r_max = np.float32(config.MAX_RADIUS)
+        force_factor = np.float32(config.FORCE_FACTOR)
 
-        # Positions-Update
+        disp = self._disp
+        dist2 = self._dist2
+        within = self._within
+        force_dir = self._force_dir
+        force_mag = self._force_mag
+        total_force = self._total_force
+
+        # Paarweise Differenzen (N x N x 2)
+        np.subtract(self.positions[:, None, :], self.positions[None, :, :], out=disp)
+        np.sum(disp * disp, axis=2, out=dist2)
+
+        # Selbstwechselwirkung ausschließen
+        np.fill_diagonal(dist2, np.inf)
+
+        # Nur Nachbarn im Radius r_max
+        np.less(dist2, r_max * r_max, out=within)
+        if not within.any():
+            self.positions += self.velocities * dt
+            self.velocities *= friction
+            self._apply_wrap_boundaries()
+            return
+
+        # Distanzen + Falloff
+        dist = np.sqrt(dist2, dtype=np.float32)  # kleines temporäres Array
+        np.where(within, 1.0 - dist / r_max, 0.0, out=force_mag)  # force_mag = falloff
+
+        # Richtungsvektoren normalisieren; wo not within -> 0
+        inv_dist = np.divide(1.0, dist, out=dist, where=within)  # dist wird zu inv_dist
+        force_dir[:] = disp * inv_dist[..., None]
+
+        # Stärke aus Interaktionsmatrix pro Typenpaar
+        pair_strength = self.interaction_matrix[self.types[:, None], self.types[None, :]]
+        np.multiply(pair_strength, force_mag, out=force_mag)
+        force_mag *= force_factor
+
+        # Gesamtbeschleunigung (Summe aller Beiträge)
+        np.sum(force_mag[..., None] * force_dir, axis=1, out=total_force)
+
+        # Geschwindigkeit und Position updaten
+        self.velocities += total_force * dt
         self.positions += self.velocities * dt
 
-        # Reibung anwenden
+        # Reibung & Randbedingungen
         self.velocities *= friction
-
-        # Randbedingungen (Torus)
         self._apply_wrap_boundaries()
 
     def _apply_wrap_boundaries(self) -> None:
