@@ -109,7 +109,10 @@ class ParticleSystem:
         force_dir[:] = disp * inv_dist[..., None]
 
         # Stärke aus Interaktionsmatrix pro Typenpaar
-        pair_strength = self.interaction_matrix[self.types[:, None], self.types[None, :]]
+        pair_strength = self.interaction_matrix[
+            self.types[:, None],
+            self.types[None, :],
+        ]
         np.multiply(pair_strength, force_mag, out=force_mag)
         force_mag *= force_factor
 
