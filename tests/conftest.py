@@ -1,5 +1,6 @@
-import pytest
 import numpy as np
+import pytest
+
 # Wir importieren eure Klasse aus dem Hauptordner
 from particle_life.simulation import ParticleSystem
 
