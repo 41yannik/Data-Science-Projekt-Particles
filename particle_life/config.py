@@ -1,31 +1,53 @@
 """
-Konfiguration für die Simulation.
-Hier stellen wir alle Parameter ein.
+Konfiguration für die Simulation (Particle Life).
+Zentrale Verwaltung aller Parameter für Physik, Fenster und Logik.
 """
+
+# --- Allgemeine Einstellungen ---
+# Setze einen Seed für reproduzierbare Ergebnisse (z.B. 42).
+# Setze auf None, um bei jedem Start eine zufällige Simulation zu erhalten.
+SEED = 42
 
 # --- Fenstereinstellungen ---
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 800
 TITLE = "Particle Life - Student Project"
+BACKGROUND_COLOR = (20, 20, 20) # Dunkles Grau für bessere Sichtbarkeit
 
-# --- Simulationseinstellungen ---
-# Anzahl der Partikel (1000 ist gut für den Anfang)
+# --- Partikel Einstellungen ---
+# Anzahl der Partikel (1000 ist gut für M2 Chips)
 PARTICLE_COUNT = 1000
 
-# Anzahl der Farben/Typen (z.B. 4: Rot, Grün, Blau, Gelb)
+# Anzahl der Farben/Typen
 PARTICLE_TYPES = 4
 
+# Farbpalette für die Typen (RGB Format)
+# Wir definieren sie hier fest, damit die Visualisierung konsistent bleibt.
+# Format: (R, G, B)
+COLOR_PALETTE = [
+    (255, 0, 0),    # Rot
+    (0, 255, 0),    # Grün
+    (0, 0, 255),    # Blau
+    (255, 255, 0),  # Gelb
+    (0, 255, 255),  # Cyan (Reserve)
+    (255, 0, 255),  # Magenta (Reserve)
+]
+
 # --- Physik Parameter ---
-# Zeitschritt: Wie schnell vergeht die Zeit pro Berechnung?
+# Zeitschritt: Delta Time pro Berechnungsschritt
 DT = 0.1
 
-# Reibung (0.0 bis 1.0).
-# Wichtig, damit Teilchen nicht unendlich schnell werden.
-# 0.95 bedeutet: Pro Schritt behalten sie 95% ihrer Geschwindigkeit.
+# Reibung (Friction): 0.0 bis 1.0
+# Faktor, mit dem die Geschwindigkeit pro Schritt multipliziert wird.
+# 0.95 = 5% Geschwindigkeitsverlust pro Tick (Dämpfung).
 FRICTION = 0.95
 
-# Maximale Kraft, die ausgeübt werden kann
+# Kraftfaktor: Wie stark stoßen/ziehen sich Teilchen maximal an?
 FORCE_FACTOR = 10.0
 
-# Wie weit können Partikel sehen?
+# Wirkungsradius: Wie weit können Partikel "sehen"?
+# Nur Partikel innerhalb dieses Radius üben Kräfte aufeinander aus.
 MAX_RADIUS = 80.0
+
+# Minimaler Abstand, um Division durch Null bei der Kraftberechnung zu vermeiden
+MIN_DISTANCE = 5.0
