@@ -4,6 +4,7 @@ import pytest
 # Wir importieren eure Klasse aus dem Hauptordner
 from particle_life.simulation import ParticleSystem
 
+
 @pytest.fixture
 def small_particle_system():
     """
