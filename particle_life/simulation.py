@@ -77,6 +77,7 @@ class ParticleSystem:
         friction = np.float32(self.friction)
         r_max = np.float32(config.MAX_RADIUS)
         force_factor = np.float32(config.FORCE_FACTOR)
+        min_distance = np.float32(config.MIN_DISTANCE)
 
         disp = self._disp
         dist2 = self._dist2
@@ -102,10 +103,14 @@ class ParticleSystem:
 
         # Distanzen + Falloff
         dist = np.sqrt(dist2, dtype=np.float32)  # kleines temporäres Array
-        np.where(within, 1.0 - dist / r_max, 0.0, out=force_mag)  # force_mag = falloff
+        # Mindestabstand, um Division durch 0 zu vermeiden
+        dist[within] = np.maximum(dist[within], min_distance)
+        np.copyto(force_mag, 1.0 - dist / r_max, where=within)
+        force_mag[~within] = 0.0  # außerhalb des Radius keine Kraft
 
         # Richtungsvektoren normalisieren; wo not within -> 0
         inv_dist = np.divide(1.0, dist, out=dist, where=within)  # dist wird zu inv_dist
+        inv_dist[~within] = 0.0
         force_dir[:] = disp * inv_dist[..., None]
 
         # Stärke aus Interaktionsmatrix pro Typenpaar
