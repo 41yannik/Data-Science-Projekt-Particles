@@ -1,7 +1,7 @@
 import sys
 
-import pygame
 import numpy as np
+import pygame
 
 import particle_life.config as config
 from particle_life.simulation import ParticleSystem
