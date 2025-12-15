@@ -23,7 +23,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-dependencies = []
+dependencies = [
+    "numpy",
+    "pygame",
+]
 description = "Simulates Particles"
 license = {file = "LICENSE"}
 name = "particle_life"
