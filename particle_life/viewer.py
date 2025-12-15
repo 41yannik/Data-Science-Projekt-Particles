@@ -22,6 +22,7 @@ def run() -> None:
 
     sim = ParticleSystem()
     running = True
+    paused = False
     step = 0
 
     while running:
@@ -31,8 +32,23 @@ def run() -> None:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                elif event.key == pygame.K_SPACE:
+                    paused = not paused
+                elif event.key == pygame.K_f:
+                    sim.friction = float(min(max(sim.friction + 0.01, 0.0), 1.0))
+                elif event.key == pygame.K_g:
+                    sim.friction = float(min(max(sim.friction - 0.01, 0.0), 1.0))
+                elif event.key == pygame.K_r:
+                    config.FORCE_FACTOR = float(max(config.FORCE_FACTOR * 1.1, 0.0))
+                elif event.key == pygame.K_e:
+                    config.FORCE_FACTOR = float(max(config.FORCE_FACTOR * 0.9, 0.0))
+                elif event.key == pygame.K_t:
+                    config.MAX_RADIUS = float(max(config.MAX_RADIUS + 1.0, 0.0))
+                elif event.key == pygame.K_z:
+                    config.MAX_RADIUS = float(max(config.MAX_RADIUS - 1.0, 0.0))
 
-        sim.update(config.DT)
+        if not paused:
+            sim.update(config.DT)
         positions = sim.get_positions()
         types = sim.get_types()
 
@@ -48,7 +64,14 @@ def run() -> None:
             pygame.draw.circle(screen, color, (x, y), radius)
 
         fps = clock.get_fps()
-        info = f"step={step} fps={fps:.1f}"
+        mode_text = "paused" if paused else "running"
+        info = (
+            f"step={step} fps={fps:.1f} "
+            f"friction={sim.friction:.3f} "
+            f"force={config.FORCE_FACTOR:.2f} "
+            f"radius={config.MAX_RADIUS:.1f} "
+            f"mode={mode_text}"
+        )
         text_surface = font.render(info, True, (255, 255, 255))
         screen.blit(text_surface, (10, 10))
 
@@ -62,4 +85,3 @@ def run() -> None:
 
 if __name__ == "__main__":
     run()
-
