@@ -1,8 +1,10 @@
-#import time
+import sys
+
 import numpy as np
 
 import particle_life.config as config
 from particle_life.simulation import ParticleSystem
+from particle_life.viewer import run as run_viewer
 
 
 def run_console() -> None:
@@ -25,11 +27,24 @@ def run_console() -> None:
                     f"first5={first5}"
                 )
             step += 1
-            # time.sleep(0.01)  # optional: CPU schonen
     except KeyboardInterrupt:
         print(f"\nStopped at step {step}")
 
 
+def main() -> None:
+    mode = "console"
+
+    if "--mode" in sys.argv:
+        index = sys.argv.index("--mode")
+        if index + 1 < len(sys.argv):
+            mode = sys.argv[index + 1]
+
+    if mode == "viewer":
+        run_viewer()
+    else:
+        run_console()
+
+
 if __name__ == "__main__":
-    run_console()
+    main()
 
