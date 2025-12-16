@@ -62,8 +62,8 @@ The system is designed with a clear separation of concerns, orchestrated by a ce
 ## Roadmap
 
   * **[x] Milestone 1 (19.11.2025):** Project Setup, Architecture Design, CI Pipeline.
-  * **[ ] Milestone 2 (17.12.2025):** Core Logic Implementation (Physics & Interaction Matrix).
-  * **[ ] Milestone 3 (17.12.2025):** Real-time Visualization & Parameter Tuning.
+  * **[x] Milestone 2 (17.12.2025):** Core Logic Implementation (Physics & Interaction Matrix).
+  * **[x] Milestone 3 (17.12.2025):** Real-time Visualization & Parameter Tuning.
   * **[ ] Milestone 4 (TBA):** Performance Optimization (>2000 particles).
   * **[ ] Milestone 5 (25.02.2026):** Final Release, Documentation & Presentation.
 
@@ -73,7 +73,7 @@ The system is designed with a clear separation of concerns, orchestrated by a ce
 
 ### Prerequisites
 
-  * Python 3.10+
+  * Python 3.8+
   * Git
 
 ### Installation
@@ -92,11 +92,42 @@ source .venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 ```
 
-### Running the Simulation
+### Running the Simulation & Visualization
+
+The application can be run in two modes:
+
+- a console-only mode (headless, safe for CI)
+- an interactive pygame viewer (Milestone 3)
 
 ```bash
-python src/main.py
+# Console mode (no window, good for CI)
+python -m particle_life.main
+
+# Viewer mode (pygame visualization)
+python -m particle_life.main --mode viewer
 ```
+
+### Viewer Controls (pygame)
+
+Once the viewer window is open, the following keys are available:
+
+- `ESC`: Close the viewer
+- `SPACE`: Pause/resume the simulation
+- `F` / `G`: Increase / decrease friction
+- `R` / `E`: Increase / decrease the global force factor
+- `T` / `Z`: Increase / decrease the interaction radius
+
+### Dependencies
+
+Runtime:
+
+- `numpy` – vectorized physics and linear algebra
+- `pygame` – real-time visualization
+
+Development and CI:
+
+- `pytest` – unit tests
+- `ruff` – linting
 
 ---
 
