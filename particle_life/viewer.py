@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 from typing import Callable, Optional
-from pathlib import Path
 
 import numpy as np
 import pygame
