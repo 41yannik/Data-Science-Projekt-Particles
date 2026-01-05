@@ -46,13 +46,6 @@ class Button:
         self.hovered = False
         self.dynamic_text = dynamic_text
 
-    def handle_event(self, event: pygame.event.Event) -> None:
-        if event.type == pygame.MOUSEMOTION:
-            self.hovered = self.rect.collidepoint(event.pos)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and self.rect.collidepoint(event.pos):
-                self.callback()
-
     def draw(self, surface: pygame.Surface) -> None:
         color = self.hover_color if self.hovered else self.base_color
         pygame.draw.rect(surface, color, self.rect)
@@ -61,6 +54,12 @@ class Button:
         text_rect = text_surface.get_rect(center=self.rect.center)
         surface.blit(text_surface, text_rect)
 
+    def handle_event(self, event: pygame.event.Event) -> None:
+        if event.type == pygame.MOUSEMOTION:
+            self.hovered = self.rect.collidepoint(event.pos)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and self.rect.collidepoint(event.pos):
+                self.callback()
 
 def run() -> None:
     if config.SEED is not None:
@@ -225,7 +224,6 @@ def run() -> None:
                     increase_radius()
                 elif event.key == pygame.K_z:
                     decrease_radius()
-
             for button in buttons:
                 button.handle_event(event)
 
@@ -256,7 +254,6 @@ def run() -> None:
         )
         text_surface = font.render(info, True, (255, 255, 255))
         screen.blit(text_surface, (10, 10))
-
         pygame.draw.rect(
             screen,
             (30, 30, 30),
