@@ -1,11 +1,26 @@
 import sys
 from typing import Callable, Optional
+from pathlib import Path
 
 import numpy as np
 import pygame
 
-import particle_life.config as config
-from particle_life.simulation import ParticleSystem
+
+def _import_dependencies():
+    try:
+        import particle_life.config as config
+        from particle_life.simulation import ParticleSystem
+        return config, ParticleSystem
+    except ModuleNotFoundError:
+        root_dir = Path(__file__).resolve().parent.parent
+        if str(root_dir) not in sys.path:
+            sys.path.insert(0, str(root_dir))
+        import particle_life.config as config
+        from particle_life.simulation import ParticleSystem
+        return config, ParticleSystem
+
+
+config, ParticleSystem = _import_dependencies()
 
 
 class Button:
