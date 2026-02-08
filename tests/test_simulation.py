@@ -15,6 +15,22 @@ def test_create_system():
     assert len(sim.get_types()) == 10
 
 
+def test_boundary_wrapping():
+    """
+    Prüft, dass Partikel am Rand korrekt gewrappt werden (Torus).
+    """
+    sim = ParticleSystem(n_particles=1, width=100, height=100, friction=1.0)
+
+    # Partikel exakt an den rechten Rand setzen und nach rechts bewegen.
+    sim.positions = np.array([[99.0, 50.0]], dtype=np.float32)
+    sim.velocities = np.array([[50.0, 0.0]], dtype=np.float32)
+
+    sim.update()
+
+    new_x = float(sim.positions[0, 0])
+    assert new_x < 5.0
+
+
 def test_particles_move(small_particle_system):
     """
     Prüft, dass sich Partikelpositionen nach update() verändern,
@@ -33,3 +49,4 @@ def test_particles_move(small_particle_system):
     positions_after = sim.positions
 
     assert np.any(positions_after != positions_before)
+
