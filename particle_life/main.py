@@ -41,6 +41,10 @@ def main() -> None:
 
     if mode == "viewer":
         run_viewer()
+    elif mode == "vispy":
+        from particle_life.viewer_vispy import run as run_vispy
+
+        run_vispy()
     else:
         run_console()
 
