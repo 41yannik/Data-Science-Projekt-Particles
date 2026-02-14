@@ -35,6 +35,20 @@ class Button:
         text_color: tuple[int, int, int],
         dynamic_text: Optional[Callable[[], str]] = None,
     ) -> None:
+        """
+        Initializes a GUI button.
+
+        Args:
+            rect (pygame.Rect): Dimension and position of the button.
+            text (str): Label text displayed on the button.
+            font (pygame.font.Font): Font used for the text.
+            callback (Callable[[], None]): Function to call when the button is clicked.
+            base_color (tuple[int, int, int]): Default background color (RGB).
+            hover_color (tuple[int, int, int]): Background color when hovered (RGB).
+            text_color (tuple[int, int, int]): Color of the text (RGB).
+            dynamic_text (Optional[Callable[[], str]]): Optional function for
+                dynamic labels.
+        """
         self.rect = rect
         self.text = text
         self.font = font
@@ -46,6 +60,12 @@ class Button:
         self.dynamic_text = dynamic_text
 
     def draw(self, surface: pygame.Surface) -> None:
+        """
+        Renders the button on the given surface.
+
+        Args:
+            surface (pygame.Surface): The Pygame surface to draw on.
+        """
         color = self.hover_color if self.hovered else self.base_color
         pygame.draw.rect(surface, color, self.rect)
         label = self.dynamic_text() if self.dynamic_text is not None else self.text
@@ -54,6 +74,12 @@ class Button:
         surface.blit(text_surface, text_rect)
 
     def handle_event(self, event: pygame.event.Event) -> None:
+        """
+        Processes mouse events for hover and click detection.
+
+        Args:
+            event (pygame.event.Event): The Pygame event to handle.
+        """
         if event.type == pygame.MOUSEMOTION:
             self.hovered = self.rect.collidepoint(event.pos)
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -61,6 +87,12 @@ class Button:
                 self.callback()
 
 def run() -> None:
+    """
+    Main loop for the interactive Pygame simulation.
+
+    Initializes the display, handles events, updates the particle system,
+    and renders the frame at 60 FPS.
+    """
     if config.SEED is not None:
         np.random.seed(config.SEED)
 
