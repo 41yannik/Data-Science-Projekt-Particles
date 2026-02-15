@@ -4,7 +4,6 @@ Ergebnisse werden in docs/profiling_report.md gespeichert.
 """
 
 import cProfile
-import pstats
 import sys
 import time
 import timeit
