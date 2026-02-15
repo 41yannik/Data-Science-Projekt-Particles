@@ -9,17 +9,14 @@ Zentrale Verwaltung aller Parameter für Physik, Fenster und Logik.
 SEED = 42
 
 # --- Fenstereinstellungen ---
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 800
-TITLE = "Particle Life - Student Project"
-BACKGROUND_COLOR = (20, 20, 20) # Dunkles Grau für bessere Sichtbarkeit
+WINDOW_WIDTH = 800  #: The width of the simulation window in pixels.
+WINDOW_HEIGHT = 800 #: The height of the simulation window in pixels.
+TITLE = "Particle Life - Student Project" #: The title shown in the window header.
+BACKGROUND_COLOR = (20, 20, 20) #: Dark gray background color (RGB).
 
 # --- Partikel Einstellungen ---
-# Anzahl der Partikel (1000 ist gut für M2 Chips)
-PARTICLE_COUNT = 1000
-
-# Anzahl der Farben/Typen
-PARTICLE_TYPES = 4
+PARTICLE_COUNT = 1000 #: Total number of particles in the simulation.
+PARTICLE_TYPES = 4   #: Number of distinct color-coded particle types.
 
 # Farbpalette für die Typen (RGB Format)
 # Wir definieren sie hier fest, damit die Visualisierung konsistent bleibt.
@@ -34,20 +31,17 @@ COLOR_PALETTE = [
 ]
 
 # --- Physik Parameter ---
-# Zeitschritt: Delta Time pro Berechnungsschritt
-DT = 0.1
+DT = 0.1 #: Simulation time step (delta time).
 
-# Reibung (Friction): 0.0 bis 1.0
-# Faktor, mit dem die Geschwindigkeit pro Schritt multipliziert wird.
-# 0.95 = 5% Geschwindigkeitsverlust pro Tick (Dämpfung).
+# Friction factor (0.0 to 1.0).
+# Multiplied with velocity each step (0.95 = 5% speed loss).
 FRICTION = 0.95
 
-# Kraftfaktor: Wie stark stoßen/ziehen sich Teilchen maximal an?
+# Maximum strength of force (attraction/repulsion) between particles.
 FORCE_FACTOR = 10.0
 
-# Wirkungsradius: Wie weit können Partikel "sehen"?
-# Nur Partikel innerhalb dieses Radius üben Kräfte aufeinander aus.
+# Maximum distance for particle interaction (unit radius).
 MAX_RADIUS = 80.0
 
-# Minimaler Abstand, um Division durch Null bei der Kraftberechnung zu vermeiden
+# Minimum distance to prevent division by zero during force calculations.
 MIN_DISTANCE = 5.0

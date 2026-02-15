@@ -13,6 +13,16 @@ class PhysicsEngine:
         self._total_force = np.empty((n_particles, 2), dtype=np.float32)
 
     def step(self, system, dt: float) -> None:
+        """
+        Calculates and applies the next simulation step.
+
+        Uses NumPy-vectorized operations to calculate pairwise distances,
+        forces based on the interaction matrix, and updates velocities and positions.
+
+        Args:
+            system: The ParticleSystem instance containing particle data.
+            dt (float): Time step (delta time) for the integration.
+        """
         dt32 = np.float32(dt)
         friction = np.float32(system.friction)
         r_max = np.float32(config.MAX_RADIUS)
@@ -72,5 +82,13 @@ class PhysicsEngine:
         width: int,
         height: int,
     ) -> None:
+        """
+        Applies toroidal (wrap-around) boundaries to particle positions.
+
+        Args:
+            positions (np.ndarray): Array of particle positions (Nx2).
+            width (int): Width of the simulation area.
+            height (int): Height of the simulation area.
+        """
         positions[:, 0] = np.mod(positions[:, 0], width)
         positions[:, 1] = np.mod(positions[:, 1], height)
