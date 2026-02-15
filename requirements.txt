@@ -2,3 +2,5 @@ numpy
 pygame
 pytest
 ruff
+vispy
+PyQt5

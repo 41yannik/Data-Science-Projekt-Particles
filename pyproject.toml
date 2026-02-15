@@ -26,6 +26,8 @@ classifiers = [
 dependencies = [
     "numpy",
     "pygame",
+    "vispy",
+    "PyQt5",
 ]
 description = "Simulates Particles"
 license = {file = "LICENSE"}
