@@ -1,6 +1,7 @@
 numpy
 pygame
 pytest
+pytest-cov
 ruff
 vispy
 PyQt5
