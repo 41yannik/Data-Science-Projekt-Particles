@@ -15,7 +15,7 @@ TITLE = "Particle Life - Student Project" #: The title shown in the window heade
 BACKGROUND_COLOR = (20, 20, 20) #: Dark gray background color (RGB).
 
 # --- Partikel Einstellungen ---
-PARTICLE_COUNT = 1000 #: Total number of particles in the simulation.
+PARTICLE_COUNT = 2000 #: Total number of particles in the simulation.
 PARTICLE_TYPES = 4   #: Number of distinct color-coded particle types.
 
 # Farbpalette für die Typen (RGB Format)

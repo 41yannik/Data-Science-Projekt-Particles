@@ -25,6 +25,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy",
+    "numba",
     "pygame",
     "vispy",
     "PyQt5",
