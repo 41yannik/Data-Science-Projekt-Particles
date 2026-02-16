@@ -42,5 +42,5 @@ jobs:
       - name: Run ruff linter
         run: ruff check --output-format=github
         
-      - name: Run tests
-        run: pytest
+      - name: Run tests with coverage
+        run: pytest --cov=particle_life --cov-fail-under=70
