@@ -44,18 +44,34 @@ This project aims to deliver a production-grade Python application focusing on a
 * **Testing Strategy:** Unit testing suite using `pytest` targeting >70% code coverage.
 * **Standards:** Strict adherence to PEP-8 and Type Hinting.
 
-##  Software Architecture
+## Software Architecture
 
 The system is designed with a clear separation of concerns, orchestrated by a central controller (`main.py`) which manages the flow between configuration, simulation logic, and visualization.
 
+### Architecture Diagram
 
+```mermaid
+flowchart TD
+    A[main.py] --> B[config.py]
+    A --> C[simulation.py]
+    A --> D[viewer.py - pygame]
+    A --> E[viewer_vispy.py - vispy]
+    C --> F[physics.py]
+    D --> C
+    E --> C
+    B --> C
+    B --> D
+    B --> E
+```
 
 ### Module Breakdown:
 
-* **Main Controller (`main.py`):** Serves as the primary orchestrator, initializing the other modules and managing the main program loop.
-* **Configuration & Rules (`config.py`):** Responsible for loading and holding all static parameters of the simulation, including particle `Colors` and the crucial `Interaction Matrix` that defines inter-particle forces.
-* **Simulation Engine (`simulation.py`):** This is the core logic unit. It contains the `Particles Class` (managing particle states like position and velocity) and executes the high-performance `Update Loop`, leveraging **NumPy** for efficient vectorized calculations of particle physics. It receives configuration data and computes the next state of the particles.
-* **Visualization / GUI (`viewer.py`):** Handles the graphical representation of the simulation. It utilizes a chosen rendering library (`Vispy` or `Pygame`) to `Draw Particles` based on the current state provided by the Simulation Engine. It also provides `GUI` elements for dynamic parameter adjustments.
+* **Main Controller (`main.py`):** Entry point and mode dispatcher (`console`, `viewer`, `vispy`).
+* **Configuration (`config.py`):** Central static parameters (window, physics constants, palette).
+* **Simulation Engine (`simulation.py`):** Particle state, update loop, and interaction matrix usage.
+* **Physics Kernel (`physics.py`):** Performance-critical force and movement calculations.
+* **Pygame Viewer (`viewer.py`):** Interactive 2D viewer with runtime controls.
+* **Vispy Viewer (`viewer_vispy.py`):** OpenGL-based viewer for better performance at higher particle counts.
 
 ---
 
@@ -64,7 +80,7 @@ The system is designed with a clear separation of concerns, orchestrated by a ce
   * **[x] Milestone 1 (19.11.2025):** Project Setup, Architecture Design, CI Pipeline.
   * **[x] Milestone 2 (17.12.2025):** Core Logic Implementation (Physics & Interaction Matrix).
   * **[x] Milestone 3 (17.12.2025):** Real-time Visualization & Parameter Tuning.
-  * **[ ] Milestone 4 (TBA):** Performance Optimization (>2000 particles).
+  * **[x] Milestone 4 (Completed):** Performance Optimization (>2000 particles).
   * **[ ] Milestone 5 (25.02.2026):** Final Release, Documentation & Presentation.
 
 ---
@@ -73,15 +89,15 @@ The system is designed with a clear separation of concerns, orchestrated by a ce
 
 ### Prerequisites
 
-  * Python 3.8+
+  * Python 3.10+
   * Git
 
 ### Installation
 
 ```bash
 # 1. Clone the repository
-git clone [https://github.com/YOUR-ORG/particle-life.git](https://github.com/YOUR-ORG/particle-life.git)
-cd particle-life
+git clone https://github.com/41yannik/Data-Science-Projekt-Particles.git
+cd Data-Science-Projekt-Particles
 
 # 2. Create virtual environment
 python -m venv .venv
@@ -97,7 +113,8 @@ pip install -r requirements.txt
 The application can be run in two modes:
 
 - a console-only mode (headless, safe for CI)
-- an interactive pygame viewer (Milestone 3)
+- an interactive `pygame` viewer
+- an OpenGL-accelerated `vispy` viewer
 
 ```bash
 # Console mode (no window, good for CI)
@@ -105,11 +122,24 @@ python -m particle_life.main
 
 # Viewer mode (pygame visualization)
 python -m particle_life.main --mode viewer
+
+# Vispy mode (OpenGL visualization)
+python -m particle_life.main --mode vispy
 ```
 
 ### Viewer Controls (pygame)
 
 Once the viewer window is open, the following keys are available:
+
+- `ESC`: Close the viewer
+- `SPACE`: Pause/resume the simulation
+- `F` / `G`: Increase / decrease friction
+- `R` / `E`: Increase / decrease the global force factor
+- `T` / `Z`: Increase / decrease the interaction radius
+
+### Viewer Controls (vispy)
+
+The vispy viewer uses the same controls as the pygame viewer:
 
 - `ESC`: Close the viewer
 - `SPACE`: Pause/resume the simulation
@@ -123,10 +153,13 @@ Runtime:
 
 - `numpy` – vectorized physics and linear algebra
 - `pygame` – real-time visualization
+- `vispy` – OpenGL-accelerated visualization backend
+- `PyQt5` – Qt backend used by vispy on desktop
 
 Development and CI:
 
 - `pytest` – unit tests
+- `pytest-cov` – coverage measurement and CI threshold
 - `ruff` – linting
 
 ---
