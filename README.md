@@ -40,7 +40,7 @@ This project aims to deliver a production-grade Python application focusing on a
 * **GUI Controls:** Dynamic adjustment of interaction parameters (gravity, friction, range) during runtime.
 
 ### 4. Software Quality (QA/Ops)
-* **CI/CD:** GitHub Actions pipeline for automated linting (`pylint`/`flake8`) and testing.
+* **CI/CD:** GitHub Actions pipeline for automated linting (`ruff`) and testing.
 * **Testing Strategy:** Unit testing suite using `pytest` targeting >70% code coverage.
 * **Standards:** Strict adherence to PEP-8 and Type Hinting.
 
@@ -108,44 +108,54 @@ source .venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 ```
 
-### Running the Simulation & Visualization
-
-The application can be run in two modes:
-
-- a console-only mode (headless, safe for CI)
-- an interactive `pygame` viewer
-- an OpenGL-accelerated `vispy` viewer
+### Running the Simulation
 
 ```bash
-# Console mode (no window, good for CI)
+# Console mode (headless, no window)
 python -m particle_life.main
 
-# Viewer mode (pygame visualization)
+# Pygame viewer (interactive, CPU-based rendering)
 python -m particle_life.main --mode viewer
 
-# Vispy mode (OpenGL visualization)
+# Vispy viewer (OpenGL, recommended for >1000 particles)
 python -m particle_life.main --mode vispy
 ```
 
-### Viewer Controls (pygame)
+### Viewer Controls
 
-Once the viewer window is open, the following keys are available:
-
-- `ESC`: Close the viewer
-- `SPACE`: Pause/resume the simulation
-- `F` / `G`: Increase / decrease friction
-- `R` / `E`: Increase / decrease the global force factor
-- `T` / `Z`: Increase / decrease the interaction radius
-
-### Viewer Controls (vispy)
-
-The vispy viewer uses the same controls as the pygame viewer:
+Both viewers (Pygame and Vispy) use the same keyboard controls:
 
 - `ESC`: Close the viewer
 - `SPACE`: Pause/resume the simulation
 - `F` / `G`: Increase / decrease friction
 - `R` / `E`: Increase / decrease the global force factor
 - `T` / `Z`: Increase / decrease the interaction radius
+
+### Running Benchmarks & Profiling
+
+```bash
+# Profiling: Physics engine with cProfile + scaling analysis
+python scripts/profile_simulation.py
+
+# Side-by-side comparison: Brute-Force O(n²) vs. Spatial Hashing O(n)
+python scripts/compare_engines.py
+
+# Pygame FPS benchmark (measures rendering performance)
+python scripts/test_pygame_fps.py
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run tests with coverage report
+pytest --cov=particle_life --cov-report=term-missing
+
+# Run linter
+ruff check
+```
 
 ### Dependencies
 
