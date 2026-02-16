@@ -121,6 +121,16 @@ python -m particle_life.main --mode viewer
 python -m particle_life.main --mode vispy
 ```
 
+### Viewer Controls
+
+Both viewers (Pygame and Vispy) use the same keyboard controls:
+
+- `ESC`: Close the viewer
+- `SPACE`: Pause/resume the simulation
+- `F` / `G`: Increase / decrease friction
+- `R` / `E`: Increase / decrease the global force factor
+- `T` / `Z`: Increase / decrease the interaction radius
+
 ### Running Benchmarks & Profiling
 
 ```bash
