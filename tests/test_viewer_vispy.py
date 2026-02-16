@@ -1,6 +1,6 @@
 import sys
-from types import SimpleNamespace
 import types
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -129,7 +129,10 @@ class _FakeSim:
         self.friction = 0.5
         self.n_particles = 3
         self.update_calls = 0
-        self._positions = np.array([[1.0, 1.0], [2.0, 3.0], [4.0, 5.0]], dtype=np.float32)
+        self._positions = np.array(
+            [[1.0, 1.0], [2.0, 3.0], [4.0, 5.0]],
+            dtype=np.float32,
+        )
         self._types = np.array([0, 1, 2], dtype=np.int32)
 
     def update(self, _dt):

@@ -27,7 +27,12 @@ def test_button_draw_and_click(dummy_pygame_env):
             dynamic_text=lambda: "D",
         )
 
-        button.handle_event(viewer.pygame.event.Event(viewer.pygame.MOUSEMOTION, {"pos": (15, 15)}))
+        button.handle_event(
+            viewer.pygame.event.Event(
+                viewer.pygame.MOUSEMOTION,
+                {"pos": (15, 15)},
+            )
+        )
         button.draw(surface)
         button.handle_event(
             viewer.pygame.event.Event(
@@ -54,7 +59,10 @@ def test_run_smoke_exits_cleanly(monkeypatch, dummy_pygame_env):
         def __init__(self):
             self.friction = 0.5
             self.update_calls = 0
-            self._positions = np.array([[10.0, 10.0], [20.0, 20.0]], dtype=np.float32)
+            self._positions = np.array(
+                [[10.0, 10.0], [20.0, 20.0]],
+                dtype=np.float32,
+            )
             self._types = np.array([0, 1], dtype=np.int32)
 
         def update(self, _dt):
@@ -73,14 +81,20 @@ def test_run_smoke_exits_cleanly(monkeypatch, dummy_pygame_env):
     monkeypatch.setattr(viewer.config, "SEED", None)
 
     first_batch = [
-        viewer.pygame.event.Event(viewer.pygame.KEYDOWN, {"key": viewer.pygame.K_SPACE}),
+        viewer.pygame.event.Event(
+            viewer.pygame.KEYDOWN,
+            {"key": viewer.pygame.K_SPACE},
+        ),
         viewer.pygame.event.Event(viewer.pygame.KEYDOWN, {"key": viewer.pygame.K_f}),
         viewer.pygame.event.Event(viewer.pygame.KEYDOWN, {"key": viewer.pygame.K_g}),
         viewer.pygame.event.Event(viewer.pygame.KEYDOWN, {"key": viewer.pygame.K_r}),
         viewer.pygame.event.Event(viewer.pygame.KEYDOWN, {"key": viewer.pygame.K_e}),
         viewer.pygame.event.Event(viewer.pygame.KEYDOWN, {"key": viewer.pygame.K_t}),
         viewer.pygame.event.Event(viewer.pygame.KEYDOWN, {"key": viewer.pygame.K_z}),
-        viewer.pygame.event.Event(viewer.pygame.MOUSEMOTION, {"pos": (12, 140)}),
+        viewer.pygame.event.Event(
+            viewer.pygame.MOUSEMOTION,
+            {"pos": (12, 140)},
+        ),
         viewer.pygame.event.Event(
             viewer.pygame.MOUSEBUTTONDOWN,
             {"button": 1, "pos": (12, 140)},
@@ -88,7 +102,11 @@ def test_run_smoke_exits_cleanly(monkeypatch, dummy_pygame_env):
         viewer.pygame.event.Event(viewer.pygame.QUIT, {}),
     ]
     event_batches = [first_batch, []]
-    monkeypatch.setattr(viewer.pygame.event, "get", lambda: event_batches.pop(0) if event_batches else [])
+    monkeypatch.setattr(
+        viewer.pygame.event,
+        "get",
+        lambda: event_batches.pop(0) if event_batches else [],
+    )
     monkeypatch.setattr(viewer.pygame.time, "Clock", FakeClock)
 
     with pytest.raises(SystemExit) as exc_info:
