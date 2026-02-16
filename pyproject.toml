@@ -78,6 +78,9 @@ line_length = "120"
 pythonpath = "."
 testpaths = ["tests"]
 
+[tool.coverage.run]
+omit = ["particle_life/legacy/*"]
+
 [tool.ruff]
 # Allgemeine Einstellungen
 line-length = 88
