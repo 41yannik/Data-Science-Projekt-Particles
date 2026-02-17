@@ -1,8 +1,8 @@
 """
-Benchmark der Particle Life Simulation: Vorher/Nachher-Vergleich (Issue #45).
+Benchmark for Particle Life simulation: before/after comparison.
 
-Misst FPS und ms/step bei verschiedenen Partikelzahlen.
-Ergebnisse werden in docs/benchmark_results.md gespeichert.
+Measures FPS and ms/step for different particle counts.
+Results are saved in docs/benchmark_results.md.
 """
 
 import sys
@@ -23,18 +23,18 @@ BENCH_STEPS = 50
 
 
 def benchmark(n_particles: int) -> tuple[float, float, float]:
-    """Benchmark für eine bestimmte Partikelzahl.
+    """Benchmark for a specific particle count.
 
     Returns
-    -------
+
     ms_per_step : float
     fps : float
-    mem_mb : float – Geschätzter Speicher (nur Spatial Hash, nicht N×N)
+    mem_mb : float - Estimated memory (spatial hash only, not N×N)
     """
     np.random.seed(config.SEED)
     sim = ParticleSystem(n_particles=n_particles)
 
-    # Warmup (inkl. Numba-JIT-Kompilierung beim ersten Aufruf)
+    # Warmup (includes Numba JIT compilation on first call)
     for _ in range(WARMUP_STEPS):
         sim.update(config.DT)
 
@@ -46,7 +46,7 @@ def benchmark(n_particles: int) -> tuple[float, float, float]:
     ms = elapsed / BENCH_STEPS * 1000
     fps = 1000.0 / ms if ms > 0 else float("inf")
 
-    # Speicher: Positions + Velocities + Types + total_force
+    # Memory: Positions + Velocities + Types + total_force
     mem = (n_particles * 2 * 4 * 3 + n_particles * 4) / 1024 / 1024
 
     return ms, fps, mem
@@ -55,7 +55,7 @@ def benchmark(n_particles: int) -> tuple[float, float, float]:
 def main():
     backend = "Numba JIT + Spatial Hashing" if HAS_NUMBA else "NumPy + Spatial Hashing"
     print(f"=== Benchmark: {backend} ===\n")
-    print(f"  {'Partikel':>8} | {'ms/step':>10} | {'FPS':>8} | {'Speicher':>10}")
+    print(f"  {'Particles':>8} | {'ms/step':>10} | {'FPS':>8} | {'Memory':>10}")
     print(f"  {'-'*8}-+-{'-'*10}-+-{'-'*8}-+-{'-'*10}")
 
     results = []
@@ -64,31 +64,31 @@ def main():
         results.append((n, ms, fps, mem))
         print(f"  {n:>8} | {ms:>10.2f} | {fps:>8.1f} | {mem:>7.3f} MB")
 
-    # --- Report speichern ---
+    # Save report
     report_path = (
         Path(__file__).resolve().parent.parent / "docs" / "benchmark_results.md"
     )
     report_path.parent.mkdir(exist_ok=True)
 
     with open(report_path, "w") as f:
-        f.write("# Benchmark-Ergebnisse: Performance-Optimierung (Issue #45)\n\n")
+        f.write("# Benchmark Results: Performance Optimization (Issue #45)\n\n")
         f.write(f"**Backend:** {backend}\n\n")
-        f.write("| Partikel | ms/step | FPS | Speicher |\n")
-        f.write("|----------|---------|-----|----------|\n")
+        f.write("| Particles | ms/step | FPS | Memory |\n")
+        f.write("|-----------|---------|-----|---------|\n")
         for n, ms, fps, mem in results:
             f.write(f"| {n} | {ms:.2f} | {fps:.1f} | {mem:.3f} MB |\n")
-        f.write("\n## Optimierung\n\n")
+        f.write("\n## Optimizations\n\n")
         f.write(
-            "- **Spatial Hashing:** Grid-basierte Nachbarschaftssuche "
-            "(O(n) statt O(n²))\n"
+            "- **Spatial Hashing:** Grid-based neighborhood search "
+            "(O(n) instead of O(n²))\n"
         )
         f.write(
-            "- **Numba JIT:** Innere Berechnungsschleife mit "
-            "`@njit(parallel=True)` kompiliert\n"
+            "- **Numba JIT:** Inner calculation loop compiled with "
+            "`@njit(parallel=True)`\n"
         )
         f.write(
-            "- **Speicher:** Keine N×N Arrays mehr – nur O(n) Speicher "
-            "für Partikel-Daten\n"
+            "- **Memory:** No more N×N arrays - only O(n) memory "
+            "for particle data\n"
         )
 
     print(f"\n✅ Report: {report_path}")

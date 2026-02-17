@@ -1,40 +1,39 @@
 """
-Konfiguration für die Simulation (Particle Life).
-Zentrale Verwaltung aller Parameter für Physik, Fenster und Logik.
+Configuration for particle life simulation.
+Manages all parameters for physics, window, and particle settings.
 """
 
-# --- Allgemeine Einstellungen ---
-# Setze einen Seed für reproduzierbare Ergebnisse (z.B. 42).
-# Setze auf None, um bei jedem Start eine zufällige Simulation zu erhalten.
+# General settings
+# Set a seed for reproducible results (e.g., 42).
+# Set to None to get a random simulation on each start.
 SEED = 42
 
-# --- Fenstereinstellungen ---
-WINDOW_WIDTH = 800  #: The width of the simulation window in pixels.
-WINDOW_HEIGHT = 800 #: The height of the simulation window in pixels.
-TITLE = "Particle Life - Student Project" #: The title shown in the window header.
-BACKGROUND_COLOR = (20, 20, 20) #: Dark gray background color (RGB).
+# Window settings
+WINDOW_WIDTH = 800  # The width of the simulation window in pixels.
+WINDOW_HEIGHT = 800  # The height of the simulation window in pixels.
+TITLE = "Particle Life - Student Project"  # The title shown in the window header.
+BACKGROUND_COLOR = (20, 20, 20)  # Dark gray background color (RGB).
 
-# --- Partikel Einstellungen ---
-PARTICLE_COUNT = 2000 #: Total number of particles in the simulation.
-PARTICLE_TYPES = 4   #: Number of distinct color-coded particle types.
+# Particle settings
+PARTICLE_COUNT = 2000  # Total number of particles in the simulation.
+PARTICLE_TYPES = 4  # Number of distinct color-coded particle types.
 
-# Farbpalette für die Typen (RGB Format)
-# Wir definieren sie hier fest, damit die Visualisierung konsistent bleibt.
+# Color palette for particle types (RGB format)
+# We define them here to keep visualization consistent.
 # Format: (R, G, B)
 COLOR_PALETTE = [
-    (255, 0, 0),    # Rot
-    (0, 255, 0),    # Grün
-    (0, 0, 255),    # Blau
-    (255, 255, 0),  # Gelb
-    (0, 255, 255),  # Cyan (Reserve)
-    (255, 0, 255),  # Magenta (Reserve)
+    (255, 0, 0),    # Red
+    (0, 255, 0),    # Green
+    (0, 0, 255),    # Blue
+    (255, 255, 0),  # Yellow
+    (0, 255, 255),  # Cyan (spare)
+    (255, 0, 255),  # Magenta (spare)
 ]
 
-# --- Physik Parameter ---
-DT = 0.1 #: Simulation time step (delta time).
+# Physics parameters
+DT = 0.1  # Simulation time step (delta time).
 
-# Friction factor (0.0 to 1.0).
-# Multiplied with velocity each step (0.95 = 5% speed loss).
+# Friction factor. Multiplied with velocity each step (0.95 = 5% speed loss).
 FRICTION = 0.95
 
 # Maximum strength of force (attraction/repulsion) between particles.

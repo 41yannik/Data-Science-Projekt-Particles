@@ -1,8 +1,8 @@
 """
-Unit Tests für das ParticleSystem.
+Unit tests for the ParticleSystem.
 
-Dieser Test-Modul prüft die Kern-Funktionalität der Partikel-Simulation,
-insbesondere die Interaktionsmatrix und deren Auswirkungen auf die Bewegung.
+This test module checks the core functionality of the particle simulation,
+particularly the interaction matrix and its effects on particle movement.
 """
 
 import numpy as np
@@ -13,11 +13,11 @@ from particle_life.simulation import ParticleSystem
 
 def test_create_system():
     """
-    Basis-Test: Prüft, ob das System korrekt initialisiert wird.
+    Basic test: Check if the system is initialized correctly.
 
-    Verifiziert:
-    - System kann mit definierten Parametern erstellt werden
-    - Positionen und Typen Arrays haben die richtige Länge
+    Verifies:
+    - System can be created with defined parameters
+    - Positions and types arrays have correct length
     """
     # System mit definierten Parametern erstellen
     sim = ParticleSystem(n_particles=10, n_types=2, width=100, height=100)
@@ -28,9 +28,7 @@ def test_create_system():
 
 
 def test_friction_reduces_velocity(small_particle_system):
-    """
-    Prüft, dass die Reibung die Geschwindigkeit reduziert.
-    """
+    """Check that friction reduces velocity."""
     system = small_particle_system
 
     # Partikel weit auseinander, aber innerhalb des Fensters platzieren.
@@ -58,12 +56,10 @@ def test_friction_reduces_velocity(small_particle_system):
 
 
 def test_boundary_wrapping():
-    """
-    Prüft, dass Partikel am Rand korrekt gewrappt werden (Torus).
-    """
+    """Check that particles wrap correctly at edges (toroidal space)."""
     sim = ParticleSystem(n_particles=1, width=100, height=100, friction=1.0)
 
-    # Partikel exakt an den rechten Rand setzen und nach rechts bewegen.
+    # Place particle exactly at right edge and move it right.
     sim.positions = np.array([[99.0, 50.0]], dtype=np.float32)
     sim.velocities = np.array([[50.0, 0.0]], dtype=np.float32)
 
@@ -75,12 +71,11 @@ def test_boundary_wrapping():
 
 def test_particles_move(small_particle_system):
     """
-    Prüft, dass sich Partikelpositionen nach update() verändern,
-    wenn eine Geschwindigkeit gesetzt ist.
+    Check that particle positions change after update() when velocity is set.
     """
     sim = small_particle_system
 
-    # Keine Interaktionskräfte, damit nur Bewegung durch Velocity zählt.
+    # No interaction forces, so only velocity movement counts.
     sim.interaction_matrix[:] = 0.0
     sim.velocities = np.full((sim.n_particles, 2), [5.0, 0.0], dtype=np.float32)
 
@@ -94,10 +89,7 @@ def test_particles_move(small_particle_system):
 
 
 def test_interaction_rules(interaction_matrix_fixed, small_particle_system):
-    """
-    HAUPT-TEST: Prüft die Interaktionsmatrix-Anwendung (Anziehung).
-
-    Issue: "Unit Test: Anwendung der Interaktionsmatrix auf Partikeltypen"
+    """Main test: Check interaction matrix application (attraction)."""
 
     Dieser Test verifiziert, dass:
     1. Die Interaktionsmatrix korrekt auf Partikeltypen angewendet wird
@@ -118,7 +110,7 @@ def test_interaction_rules(interaction_matrix_fixed, small_particle_system):
     ✓ Test nutzt die Fixture interaction_matrix_fixed
     ✓ Berechnete Kraft/Bewegung entspricht der Matrix-Logik
     """
-    # ===== SETUP =====
+    # SETUP 
     # System mit 2 Partikeln erstellen
     sim = ParticleSystem(
         n_particles=2,
@@ -144,21 +136,21 @@ def test_interaction_rules(interaction_matrix_fixed, small_particle_system):
     sim.interaction_matrix = interaction_matrix_fixed
     # Matrix: [[0.0, 0.5], [-0.5, 0.0]]
 
-    # ===== VORHER-MESSUNG =====
+    # VORHER-MESSUNG
     pos_before = sim.positions.copy()
 
-    # ===== SIMULATION =====
+    # SIMULATION
     # Einen Update-Schritt ausführen
     sim.update(dt=0.01)
 
-    # ===== NACHHER-MESSUNG =====
+    # NACHHER-MESSUNG
     pos_after = sim.positions.copy()
 
     # Bewegungsvektoren berechnen
     movement_0 = pos_after[0] - pos_before[0]
     movement_1 = pos_after[1] - pos_before[1]
 
-    # ===== ASSERTIONS =====
+    # ASSERTIONS
 
     # 1. Beide Partikel müssen sich bewegt haben
     assert np.abs(movement_0[0]) > 1e-6, (
@@ -195,24 +187,24 @@ def test_interaction_rules(interaction_matrix_fixed, small_particle_system):
 
 def test_interaction_rules_repulsion():
     """
-    BONUS-TEST: Prüft die Interaktionsmatrix-Anwendung (Abstoßung).
+    Bonus test: Check interaction matrix application (repulsion).
 
-    Dieser Test prüft das entgegengesetzte Szenario:
-    Wenn beide Partikel ABSTOSSENDE Kräfte erfahren.
+    This test checks the opposite scenario:
+    When both particles experience REPULSIVE forces.
 
-    Szenario:
+    Scenario:
     --------
-    - Zwei Partikel nebeneinander
-    - Repulsive Matrix: [[0.0, -0.5], [-0.5, 0.0]]
-      * Beide Partikel stoßen sich gegenseitig ab
-    - Erwartet: Partikel bewegen sich VONEINANDER WEG
+    - Two particles side by side
+    - Repulsive matrix: [[0.0, -0.5], [-0.5, 0.0]]
+      * Both particles repel each other
+    - Expected: Particles move AWAY FROM each other
 
-    Akzeptanzkriterien:
-    ------------------
-    ✓ Partikel bewegen sich in unterschiedliche Richtungen
-    ✓ Kraftrichtung ist korrekt berechnet
+    Acceptance criteria:
+    -------------------
+    * Particles move in different directions
+    * Force direction is calculated correctly
     """
-    # ===== SETUP =====
+    # SETUP
     sim = ParticleSystem(
         n_particles=2,
         n_types=2,
@@ -237,19 +229,19 @@ def test_interaction_rules_repulsion():
     ], dtype=np.float32)
     sim.interaction_matrix = repulsive_matrix
 
-    # ===== VORHER-MESSUNG =====
+    # VORHER-MESSUNG
     pos_before = sim.positions.copy()
 
-    # ===== SIMULATION =====
+    # SIMULATION
     sim.update(dt=0.01)
 
-    # ===== NACHHER-MESSUNG =====
+    # NACHHER-MESSUNG
     pos_after = sim.positions.copy()
 
     movement_0 = pos_after[0] - pos_before[0]
     movement_1 = pos_after[1] - pos_before[1]
 
-    # ===== ASSERTIONS =====
+    # ASSERTIONS
 
     # 1. Partikel müssen sich IN UNTERSCHIEDLICHE Richtungen bewegen
     #    (voneinander weg)
