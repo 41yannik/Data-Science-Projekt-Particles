@@ -89,7 +89,7 @@ def test_particles_move(small_particle_system):
 
 
 def test_interaction_rules(interaction_matrix_fixed, small_particle_system):
-    """Main test: Check interaction matrix application (attraction)."""
+    """Main test: Check interaction matrix application (attraction).
 
     Dieser Test verifiziert, dass:
     1. Die Interaktionsmatrix korrekt auf Partikeltypen angewendet wird

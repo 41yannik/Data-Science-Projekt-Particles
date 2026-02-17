@@ -231,16 +231,16 @@ def run() -> None:
         np.random.seed(config.SEED)
 
     sim = ParticleSystem()
-    _viewer = VispyViewer(sim=sim)  # noqa: F841: Referenz halten
+    _viewer = VispyViewer(sim=sim)  # noqa: F841
     app.run()
 
 
 def run_poc() -> None:
-    """Start PoC mode with random static points (Issue #35)."""
-    _viewer = VispyViewer(sim=None)  # noqa: F841: Referenz halten
+    """Start PoC mode with random static points."""
+    _viewer = VispyViewer(sim=None)  # noqa: F841
     app.run()
 
 
 if __name__ == "__main__":
-    # Direkt ausführen = PoC Modus (Issue #35)
+    # Direkt ausführen = PoC Modus
     run_poc()

@@ -13,7 +13,6 @@ import numpy as np
 
 import particle_life.config as config
 
-
 # Try to import Numba and set fallback flag
 
 try:
