@@ -13,6 +13,7 @@ import numpy as np
 
 import particle_life.config as config
 
+
 # Try to import Numba and set fallback flag
 
 try:
@@ -43,7 +44,7 @@ if HAS_NUMBA:
         cell_indices : ndarray (grid_h, grid_w, max_per_cell): Particle IDs
         """
         n = positions.shape[0]
-        max_per_cell = n  # Worst case: alle in einer Zelle
+        max_per_cell = n  # Worst case: all in one cell
         cell_counts = np.zeros((grid_h, grid_w), dtype=np.int32)
         cell_indices = np.empty((grid_h, grid_w, max_per_cell), dtype=np.int32)
 
@@ -151,11 +152,11 @@ def _build_cell_lists_numpy(
     cy = (positions[:, 1] / cell_size).astype(np.int32) % grid_h
     cell_id = cy * grid_w + cx
 
-    # Sortiere Partikel nach Zell-ID
+    # Sort Particels after Cell ID
     order = np.argsort(cell_id)
     sorted_cell_id = cell_id[order]
 
-    # Finde Start/Ende jeder Zelle
+    # Find start/end of each cell in sorted list
     total_cells = grid_w * grid_h
     starts = np.zeros(total_cells, dtype=np.int32)
     counts = np.zeros(total_cells, dtype=np.int32)
@@ -197,7 +198,7 @@ def _compute_forces_numpy(
         cx_i = int(positions[i, 0] / cell_size) % grid_w
         cy_i = int(positions[i, 1] / cell_size) % grid_h
 
-        # 3×3 Nachbarschaft
+        # Iterate over 3x3 neighborhood
         for dcx in range(-1, 2):
             for dcy in range(-1, 2):
                 nx_c = (cx_i + dcx) % grid_w
@@ -208,7 +209,7 @@ def _compute_forces_numpy(
                 if c_count == 0:
                     continue
 
-                # Alle Partikel in dieser Zelle
+                # All Particels for this cell
                 js = order[c_start : c_start + c_count]
                 js = js[js != i]
                 if len(js) == 0:
@@ -246,7 +247,8 @@ def _compute_forces_numpy(
 
 
 
-# Öffentliche PhysicsEngine-Klasse
+
+# Public PhysicsEngine-Class
 
 class PhysicsEngine:
     """High-performance physics engine with spatial hashing.
