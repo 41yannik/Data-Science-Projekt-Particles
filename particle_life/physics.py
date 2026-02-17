@@ -44,7 +44,7 @@ if HAS_NUMBA:
         cell_indices : ndarray (grid_h, grid_w, max_per_cell): Particle IDs
         """
         n = positions.shape[0]
-        max_per_cell = n  # Worst case: all in one cell
+        max_per_cell = n  # Worst case: alle in einer Zelle
         cell_counts = np.zeros((grid_h, grid_w), dtype=np.int32)
         cell_indices = np.empty((grid_h, grid_w, max_per_cell), dtype=np.int32)
 

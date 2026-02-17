@@ -46,10 +46,10 @@ def bench(engine_cls, n_particles, n_steps=30):
 
 
 print("=" * 65)
-print("  Comparison: Brute-Force O(n2) vs. Spatial Hashing O(n)")
+print("  Vergleich: Brute-Force O(n2) vs. Spatial Hashing O(n)")
 print("=" * 65)
 print()
-print(f"  {'Particles':>8} | {'Brute-Force':>14} | {'Optimized':>14} | {'Speedup':>8}")
+print(f"  {'Partikel':>8} | {'Brute-Force':>14} | {'Optimiert':>14} | {'Speedup':>8}")
 print(f"  {'-'*8}-+-{'-'*14}-+-{'-'*14}-+-{'-'*8}")
 
 for n in [100, 500, 1000, 1500, 2000, 3000]:
@@ -58,4 +58,4 @@ for n in [100, 500, 1000, 1500, 2000, 3000]:
     speedup = ms_old / ms_new if ms_new > 0 else float("inf")
     print(f"  {n:>8} | {ms_old:>10.2f} ms | {ms_new:>10.2f} ms | {speedup:>7.1f}x")
 
-print("\nDone!")
+print("\nFertig!")

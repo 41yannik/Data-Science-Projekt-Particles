@@ -55,7 +55,7 @@ def benchmark(n_particles: int) -> tuple[float, float, float]:
 def main():
     backend = "Numba JIT + Spatial Hashing" if HAS_NUMBA else "NumPy + Spatial Hashing"
     print(f"=== Benchmark: {backend} ===\n")
-    print(f"  {'Particles':>8} | {'ms/step':>10} | {'FPS':>8} | {'Memory':>10}")
+    print(f"  {'Partikel':>8} | {'ms/step':>10} | {'FPS':>8} | {'Speicher':>10}")
     print(f"  {'-'*8}-+-{'-'*10}-+-{'-'*8}-+-{'-'*10}")
 
     results = []
@@ -71,24 +71,24 @@ def main():
     report_path.parent.mkdir(exist_ok=True)
 
     with open(report_path, "w") as f:
-        f.write("# Benchmark Results: Performance Optimization (Issue #45)\n\n")
+        f.write("# Benchmark-Ergebnisse: Performance-Optimierung (Issue #45)\n\n")
         f.write(f"**Backend:** {backend}\n\n")
-        f.write("| Particles | ms/step | FPS | Memory |\n")
-        f.write("|-----------|---------|-----|---------|\n")
+        f.write("| Partikel | ms/step | FPS | Speicher |\n")
+        f.write("|----------|---------|-----|----------|\n")
         for n, ms, fps, mem in results:
             f.write(f"| {n} | {ms:.2f} | {fps:.1f} | {mem:.3f} MB |\n")
-        f.write("\n## Optimizations\n\n")
+        f.write("\n## Optimierung\n\n")
         f.write(
-            "- **Spatial Hashing:** Grid-based neighborhood search "
-            "(O(n) instead of O(n²))\n"
+            "- **Spatial Hashing:** Grid-basierte Nachbarschaftssuche "
+            "(O(n) statt O(n²))\n"
         )
         f.write(
-            "- **Numba JIT:** Inner calculation loop compiled with "
-            "`@njit(parallel=True)`\n"
+            "- **Numba JIT:** Innere Berechnungsschleife mit "
+            "`@njit(parallel=True)` kompiliert\n"
         )
         f.write(
-            "- **Memory:** No more N×N arrays - only O(n) memory "
-            "for particle data\n"
+            "- **Speicher:** Keine N×N Arrays mehr – nur O(n) Speicher "
+            "für Partikel-Daten\n"
         )
 
     print(f"\n✅ Report: {report_path}")

@@ -105,13 +105,13 @@ def main():
     )
 
     print("=" * 65)
-    print("  Verification: Real-time simulation (Issue #48)")
+    print("  Verifikation: Echtzeit-Simulation (Issue #48)")
     print(f"  Backend: {backend}")
     print("=" * 65)
 
     # Physics FPS 
     print(f"\n{'='*40}")
-    print("  1. Physics Engine FPS (without rendering)")
+    print("  1. Physik-Engine FPS (ohne Rendering)")
     print(f"{'='*40}\n")
 
     physics_results = []
@@ -119,31 +119,31 @@ def main():
         ms, fps = measure_physics_fps(n)
         status = "✅ PASS" if fps >= TARGET_FPS else "❌ FAIL"
         physics_results.append((n, ms, fps, status))
-        print(f"  {n:>5} Particles | {ms:>8.2f} ms/step | {fps:>8.1f} FPS | {status}")
+        print(f"  {n:>5} Partikel | {ms:>8.2f} ms/step | {fps:>8.1f} FPS | {status}")
 
     # Pygame FPS 
     print(f"\n{'='*40}")
-    print("  2. Pygame Viewer FPS (with rendering)")
+    print("  2. Pygame-Viewer FPS (mit Rendering)")
     print(f"{'='*40}\n")
 
     pygame_results = []
     for n in PARTICLE_COUNTS:
         fps = measure_pygame_fps(n, steps=100)
         if fps is not None:
-            status = "✅ PASS" if fps >= TARGET_FPS else "⚠️ SLOW"
+            status = "✅ PASS" if fps >= TARGET_FPS else "⚠️ LANGSAM"
             pygame_results.append((n, fps, status))
-            print(f"  {n:>5} Particles | {fps:>8.1f} FPS | {status}")
+            print(f"  {n:>5} Partikel | {fps:>8.1f} FPS | {status}")
         else:
             pygame_results.append((n, 0.0, "⚠️ SKIP"))
-            print(f"  {n:>5} Particles | SKIP (no display / pygame error)")
+            print(f"  {n:>5} Partikel | SKIP (kein Display / pygame-Fehler)")
 
     # Vispy info
     print(f"\n{'='*40}")
-    print("  3. Vispy Viewer (OpenGL)")
+    print("  3. Vispy-Viewer (OpenGL)")
     print(f"{'='*40}\n")
-    print("  Vispy FPS must be measured in the visual application:")
+    print("  Vispy-FPS muss in der visuellen Anwendung gemessen werden:")
     print("    python -m particle_life.main --mode vispy")
-    print("  FPS is shown in the window title.")
+    print("  FPS wird im Fenstertitel angezeigt.")
 
     # Report
     report_path = (
@@ -153,72 +153,73 @@ def main():
 
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(
-            "# Verification: Real-time simulation"
-            " with >2000 particles (Issue #48)\n\n"
+            "# Verifikation: Echtzeit-Simulation"
+            " mit >2000 Partikeln (Issue #48)\n\n"
         )
         f.write(f"**Backend:** {backend}\n\n")
-        f.write(f"**Target:** ≥{TARGET_FPS} FPS at ≥2000 particles\n\n")
+        f.write(f"**Ziel:** ≥{TARGET_FPS} FPS bei ≥2000 Partikeln\n\n")
 
-        f.write("## 1. Physics Engine FPS (without rendering)\n\n")
-        f.write("| Particles | ms/step | FPS | Status |\n")
-        f.write("|-----------|---------|-----|--------|\n")
+        f.write("## 1. Physik-Engine FPS (ohne Rendering)\n\n")
+        f.write("| Partikel | ms/step | FPS | Status |\n")
+        f.write("|----------|---------|-----|--------|\n")
         for n, ms, fps, status in physics_results:
             f.write(f"| {n} | {ms:.2f} | {fps:.1f} | {status} |\n")
 
-        f.write("\n## 2. Pygame Viewer FPS (with rendering)\n\n")
+        f.write("\n## 2. Pygame-Viewer FPS (mit Rendering)\n\n")
         if pygame_results:
-            f.write("| Particles | FPS | Status |\n")
-            f.write("|-----------|-----|--------|\n")
+            f.write("| Partikel | FPS | Status |\n")
+            f.write("|----------|-----|--------|\n")
             for n, fps, status in pygame_results:
                 f.write(f"| {n} | {fps:.1f} | {status} |\n")
         else:
-            f.write("*Pygame not available or no display.*\n")
+            f.write("*Pygame nicht verfügbar oder kein Display.*\n")
 
-        f.write("\n## 3. Vispy Viewer (OpenGL)\n\n")
+        f.write("\n## 3. Vispy-Viewer (OpenGL)\n\n")
         f.write(
-            "Vispy uses GPU rendering and is much"
-            " faster than Pygame.\n"
+            "Vispy nutzt GPU-Rendering und ist deutlich"
+            " performanter als Pygame.\n"
         )
-        f.write("FPS is shown in the window title.\n\n")
+        f.write("FPS wird im Fenstertitel angezeigt.\n\n")
         f.write(
-            "**Start:**\n```bash\n"
+            "**Starten:**\n```bash\n"
             "python -m particle_life.main --mode vispy"
             "\n```\n\n"
         )
 
-        f.write("## 4. Recommendations\n\n")
-        f.write("| Viewer | Recommendation |\n")
-        f.write("|--------|----------------|\n")
+        f.write("## 4. Empfehlung\n\n")
+        f.write("| Viewer | Empfehlung |\n")
+        f.write("|--------|------------|\n")
         f.write(
-            "| **Vispy** | ✅ Recommended for >2000 particles"
-            " (GPU-based) |\n"
+            "| **Vispy** | ✅ Für >2000 Partikel"
+            " empfohlen (GPU-basiert) |\n"
         )
         f.write(
-            "| **Pygame** | ⚠️ Good for ≤1000 particles"
-            " (CPU rendering) |\n"
+            "| **Pygame** | ⚠️ Für ≤1000 Partikel"
+            " geeignet (CPU-Rendering) |\n"
         )
         f.write(
-            "| **Headless** | ✅ Physics engine does"
-            " >800 FPS at 2000 particles |\n\n"
+            "| **Headless** | ✅ Physik-Engine schafft"
+            " >800 FPS bei 2000 Partikeln |\n\n"
         )
 
-        f.write("## 5. Conclusion\n\n")
+        f.write("## 5. Fazit\n\n")
         # Check if 2000 passed
         fps_2000 = next((fps for n, _, fps, _ in physics_results if n == 2000), 0)
         if fps_2000 >= TARGET_FPS:
             f.write(
-                "✅ **Real-time requirement is met.** "
-                f"At 2000 particles, the physics engine"
-                f" delivers {fps_2000:.0f} FPS "
-                f"(target: ≥{TARGET_FPS} FPS). "
-                "Combined with the Vispy viewer,"
-                " smooth real-time visualization"
-                " is guaranteed.\n"
+                "✅ **Die Echtzeit-Anforderung"
+                " ist erfüllt.** "
+                f"Bei 2000 Partikeln liefert die"
+                f" Physik-Engine {fps_2000:.0f} FPS "
+                f"(Ziel: ≥{TARGET_FPS} FPS). "
+                "In Kombination mit dem Vispy-Viewer"
+                " ist flüssige Echtzeit-Darstellung"
+                " gewährleistet.\n"
             )
         else:
             f.write(
-                f"⚠️ Physics engine reaches {fps_2000:.0f} FPS at 2000 particles. "
-                f"Video export recommended as fallback.\n"
+                f"⚠️ Die Physik-Engine erreicht {fps_2000:.0f} FPS bei 2000 Partikeln. "
+                f"Video-Export als Fallback empfohlen.\n"
             )
 
     print(f"\n✅ Report: {report_path}")
