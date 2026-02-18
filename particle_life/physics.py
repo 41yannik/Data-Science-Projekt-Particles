@@ -1,21 +1,20 @@
 """
-Optimierte Physik-Engine mit Spatial Hashing und Numba JIT (Issue #45).
+Optimized physics engine with spatial hashing and Numba JIT.
 
-Ersetzt die O(n²) Brute-Force-Berechnung durch eine Grid-basierte
-Nachbarschaftssuche (Spatial Hashing), sodass nur Partikelpaare innerhalb
-von MAX_RADIUS berechnet werden.  Durchschnittliche Komplexität: O(n).
+Replaces O(n2) brute force calculation with a grid-based neighborhood search
+(spatial hashing), so only particle pairs within MAX_RADIUS are computed.
+Average complexity: O(n).
 
-Falls Numba installiert ist, wird die innere Berechnungsschleife per
-@njit kompiliert. Ansonsten wird ein reiner NumPy-Fallback verwendet.
+If Numba is installed, the inner calculation loop is compiled with @njit.
+Otherwise, a pure NumPy fallback is used.
 """
 
 import numpy as np
 
 import particle_life.config as config
 
-# ---------------------------------------------------------------------------
-# Versuche Numba zu importieren; setze Flag für Fallback
-# ---------------------------------------------------------------------------
+# Try to import Numba and set fallback flag
+
 try:
     import numba  # noqa: F401
     from numba import njit, prange
@@ -25,9 +24,8 @@ except ImportError:  # pragma: no cover
     HAS_NUMBA = False
 
 
-# ===================================================================
-# Numba-kompilierte Kernfunktionen
-# ===================================================================
+# Numba-compiled core functions
+
 if HAS_NUMBA:
 
     @njit(cache=True)
@@ -37,15 +35,15 @@ if HAS_NUMBA:
         grid_w: int,
         grid_h: int,
     ):
-        """Ordnet jede Partikel der passenden Gitterzelle zu.
+        """Assigns each particle to its corresponding grid cell.
 
         Returns
-        -------
-        cell_counts : ndarray (grid_h, grid_w) – Anzahl Partikel pro Zelle
-        cell_indices : ndarray (grid_h, grid_w, max_per_cell) – Partikel-IDs
+ 
+        cell_counts : ndarray (grid_h, grid_w):Number of particles per cell
+        cell_indices : ndarray (grid_h, grid_w, max_per_cell): Particle IDs
         """
         n = positions.shape[0]
-        max_per_cell = n  # Worst case: alle in einer Zelle
+        max_per_cell = n  # Worst case: all in one cell
         cell_counts = np.zeros((grid_h, grid_w), dtype=np.int32)
         cell_indices = np.empty((grid_h, grid_w, max_per_cell), dtype=np.int32)
 
@@ -75,13 +73,13 @@ if HAS_NUMBA:
         height: float,
         total_force: np.ndarray,
     ):
-        """Berechnet Kräfte mit Spatial Hashing – nur Nachbarzellen."""
+        """Computes forces using spatial hashing - only neighbor cells."""
         n = positions.shape[0]
         r_max_sq = r_max * r_max
         half_w = width * 0.5
         half_h = height * 0.5
 
-        # Parallelisiert über alle Partikel
+        # Parallelized over all particles
         for i in prange(n):
             fx = np.float32(0.0)
             fy = np.float32(0.0)
@@ -89,7 +87,7 @@ if HAS_NUMBA:
             cx_i = int(positions[i, 0] / cell_size) % grid_w
             cy_i = int(positions[i, 1] / cell_size) % grid_h
 
-            # Iteriere über 3×3 Nachbarschaft
+            # Iterate over 3x3 neighborhood
             for dcx in range(-1, 2):
                 for dcy in range(-1, 2):
                     nx_c = (cx_i + dcx) % grid_w
@@ -101,7 +99,7 @@ if HAS_NUMBA:
                         if j == i:
                             continue
 
-                        # Displacement mit toroidalem Wrapping
+                        # Displacement with toroidal wrapping
                         dx = positions[j, 0] - positions[i, 0]
                         dy = positions[j, 1] - positions[i, 1]
 
@@ -123,14 +121,14 @@ if HAS_NUMBA:
                         if dist < min_distance:
                             dist = min_distance
 
-                        # Normierte Kraft (1 bei dist=0, 0 bei dist=r_max)
+                        # Normalized force (1 at dist=0, 0 at dist=r_max)
                         mag = np.float32(1.0) - dist / r_max
 
-                        # Interaktionsmatrix nachschlagen
+                        # Look up interaction matrix
                         strength = interaction_matrix[types[i], types[j]]
                         mag *= strength * force_factor
 
-                        # Richtungsvektor (normiert)
+                        # Direction vector (normalized)
                         inv_dist = np.float32(1.0) / dist
                         fx += mag * dx * inv_dist
                         fy += mag * dy * inv_dist
@@ -139,25 +137,25 @@ if HAS_NUMBA:
             total_force[i, 1] = fy
 
 
-# ===================================================================
-# NumPy-Fallback (ohne Numba)
-# ===================================================================
+
+# NumPy fallback (without Numba)
+
 def _build_cell_lists_numpy(
     positions: np.ndarray,
     cell_size: float,
     grid_w: int,
     grid_h: int,
 ):
-    """Erstellt Zell-Listen mit reinem NumPy."""
+    """Creates cell lists using pure NumPy."""
     cx = (positions[:, 0] / cell_size).astype(np.int32) % grid_w
     cy = (positions[:, 1] / cell_size).astype(np.int32) % grid_h
     cell_id = cy * grid_w + cx
 
-    # Sortiere Partikel nach Zell-ID
+    # Sort Particels after Cell ID
     order = np.argsort(cell_id)
     sorted_cell_id = cell_id[order]
 
-    # Finde Start/Ende jeder Zelle
+    # Find start/end of each cell in sorted list
     total_cells = grid_w * grid_h
     starts = np.zeros(total_cells, dtype=np.int32)
     counts = np.zeros(total_cells, dtype=np.int32)
@@ -187,7 +185,7 @@ def _compute_forces_numpy(
     height: float,
     total_force: np.ndarray,
 ):
-    """Berechnet Kräfte mit Spatial Hashing – reiner NumPy-Fallback."""
+    """Computes forces using spatial hashing - pure NumPy fallback."""
     n = positions.shape[0]
     r_max_sq = r_max * r_max
     half_w = width * 0.5
@@ -199,7 +197,7 @@ def _compute_forces_numpy(
         cx_i = int(positions[i, 0] / cell_size) % grid_w
         cy_i = int(positions[i, 1] / cell_size) % grid_h
 
-        # 3×3 Nachbarschaft
+        # Iterate over 3x3 neighborhood
         for dcx in range(-1, 2):
             for dcy in range(-1, 2):
                 nx_c = (cx_i + dcx) % grid_w
@@ -210,7 +208,7 @@ def _compute_forces_numpy(
                 if c_count == 0:
                     continue
 
-                # Alle Partikel in dieser Zelle
+                # All Particels for this cell
                 js = order[c_start : c_start + c_count]
                 js = js[js != i]
                 if len(js) == 0:
@@ -247,13 +245,14 @@ def _compute_forces_numpy(
                 total_force[i, 1] += np.sum(mag * dy * inv_dist)
 
 
-# ===================================================================
-# Öffentliche PhysicsEngine-Klasse
-# ===================================================================
-class PhysicsEngine:
-    """Performante Physik-Engine mit Spatial Hashing.
 
-    Nutzt Numba JIT wenn verfügbar, fällt sonst auf NumPy zurück.
+
+# Public PhysicsEngine-Class
+
+class PhysicsEngine:
+    """High-performance physics engine with spatial hashing.
+
+    Uses Numba JIT if available, falls back to NumPy otherwise.
     """
 
     def __init__(self, n_particles: int) -> None:
@@ -261,10 +260,10 @@ class PhysicsEngine:
         self._numba_warmed_up = False
 
     def step(self, system, dt: float) -> None:
-        """Berechnet und wendet den nächsten Simulationsschritt an.
+        """Computes and applies the next simulation step.
 
-        Uses Spatial Hashing to achieve O(n) average complexity instead
-        of O(n²) brute force.
+        Uses spatial hashing to achieve O(n) average complexity instead
+        of O(n2) brute force.
 
         Args:
             system: The ParticleSystem instance containing particle data.
@@ -291,7 +290,7 @@ class PhysicsEngine:
         grid_h = max(1, int(np.ceil(height / cell_size)))
 
         if HAS_NUMBA:
-            # --- Numba-Pfad ---
+            # Numba-Pfad
             cell_counts, cell_indices = _build_cell_lists(
                 positions, cell_size, grid_w, grid_h,
             )
@@ -303,7 +302,7 @@ class PhysicsEngine:
                 width, height, total_force,
             )
         else:
-            # --- NumPy-Fallback ---
+            # NumPy-Fallback
             order, starts, counts, _ = _build_cell_lists_numpy(
                 positions, cell_size, grid_w, grid_h,
             )

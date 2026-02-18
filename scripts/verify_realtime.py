@@ -1,11 +1,11 @@
 """
-Verifikation: Echtzeit-Simulation mit >2000 Partikeln (Issue #48).
+Verification: Real-time simulation with >2000 particles (Issue #48).
 
-Misst die Physik-FPS bei verschiedenen Partikelzahlen und erstellt
-einen Verifikationsbericht. Viewer-FPS werden separat gemessen, wenn
-Pygame/Vispy verfügbar sind (headless-sicher).
+Measures physics FPS at different particle counts and creates a
+verification report. Viewer FPS are measured separately if
+Pygame/Vispy are available (headless-safe).
 
-Aufruf:
+Usage:
     python scripts/verify_realtime.py
 """
 
@@ -28,10 +28,10 @@ TARGET_FPS = 30
 
 
 def measure_physics_fps(n: int) -> tuple[float, float]:
-    """Misst reine Physik-FPS (ohne Rendering).
+    """Measure pure physics FPS (without rendering).
 
     Returns
-    -------
+
     ms_per_step, fps
     """
     np.random.seed(config.SEED)
@@ -51,9 +51,9 @@ def measure_physics_fps(n: int) -> tuple[float, float]:
 
 
 def measure_pygame_fps(n: int, steps: int = 200) -> float | None:
-    """Misst Pygame-Viewer-FPS (öffnet kurz ein Fenster).
+    """Measure Pygame viewer FPS (opens a window briefly).
 
-    Returns None wenn Pygame nicht verfügbar oder kein Display.
+    Returns None if Pygame is not available or no display.
     """
     try:
         import os
@@ -87,7 +87,7 @@ def measure_pygame_fps(n: int, steps: int = 200) -> float | None:
                 color = config.COLOR_PALETTE[t % len(config.COLOR_PALETTE)]
                 pygame.draw.circle(screen, color, (x_pos, y_pos), 2)
             pygame.display.flip()
-            clock.tick(0)  # Uncapped
+            clock.tick(0)  # Uncapped FPS
 
         elapsed = time.perf_counter() - t0
         pygame.quit()
@@ -109,7 +109,7 @@ def main():
     print(f"  Backend: {backend}")
     print("=" * 65)
 
-    # === Physik-FPS ===
+    # Physics FPS 
     print(f"\n{'='*40}")
     print("  1. Physik-Engine FPS (ohne Rendering)")
     print(f"{'='*40}\n")
@@ -121,7 +121,7 @@ def main():
         physics_results.append((n, ms, fps, status))
         print(f"  {n:>5} Partikel | {ms:>8.2f} ms/step | {fps:>8.1f} FPS | {status}")
 
-    # === Pygame-FPS ===
+    # Pygame FPS 
     print(f"\n{'='*40}")
     print("  2. Pygame-Viewer FPS (mit Rendering)")
     print(f"{'='*40}\n")
@@ -137,7 +137,7 @@ def main():
             pygame_results.append((n, 0.0, "⚠️ SKIP"))
             print(f"  {n:>5} Partikel | SKIP (kein Display / pygame-Fehler)")
 
-    # === Vispy-Info ===
+    # Vispy info
     print(f"\n{'='*40}")
     print("  3. Vispy-Viewer (OpenGL)")
     print(f"{'='*40}\n")
@@ -145,7 +145,7 @@ def main():
     print("    python -m particle_life.main --mode vispy")
     print("  FPS wird im Fenstertitel angezeigt.")
 
-    # === Report ===
+    # Report
     report_path = (
         Path(__file__).resolve().parent.parent / "docs" / "realtime_verification.md"
     )

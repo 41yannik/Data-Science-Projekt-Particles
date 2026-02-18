@@ -1,6 +1,6 @@
 """
-Pygame-Viewer FPS-Test mit der neuen Physik-Engine.
-Misst die FPS für verschiedene Partikelzahlen (5 Sek pro Test).
+Pygame viewer FPS test with new physics engine.
+Measures FPS for different particle counts (5 sec per test).
 """
 
 import sys
@@ -17,7 +17,7 @@ from particle_life.simulation import ParticleSystem
 
 
 def test_pygame_fps(n_particles: int, duration: float = 5.0) -> float:
-    """Startet Pygame, rendert n_particles für duration Sek, gibt FPS zurück."""
+    """Start Pygame, render n_particles for duration seconds, return FPS."""
     np.random.seed(config.SEED)
     sim = ParticleSystem(n_particles=n_particles)
 

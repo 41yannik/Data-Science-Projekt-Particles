@@ -1,5 +1,5 @@
 """
-Core simulation module.
+Simulation module with particle system management.
 """
 
 import numpy as np
@@ -9,7 +9,7 @@ from particle_life.physics import PhysicsEngine
 
 
 class ParticleSystem:
-    """Verwaltet die Partikel-Daten, Regeln und Bewegung."""
+    """Manages particle data, rules, and movement."""
 
     def __init__(
         self,
@@ -20,10 +20,10 @@ class ParticleSystem:
         friction: float | None = None,
     ) -> None:
         """
-        Initialisiert das System.
+        Initializes the system.
 
-        Parameter können für Tests überschrieben werden, ansonsten werden
-        Standardwerte aus der config.py verwendet.
+        Parameters can be overridden for tests, otherwise default values
+        from config.py are used.
         """
         self.n_particles = (
             n_particles if n_particles is not None else config.PARTICLE_COUNT
@@ -55,13 +55,13 @@ class ParticleSystem:
         self.engine.step(self, float(dt))
 
     def get_positions(self):
-        """Gibt die Positionen zurück."""
+        """Returns the particle positions."""
         return self.positions
 
     def get_types(self):
-        """Gibt die Typen zurück."""
+        """Returns the particle types."""
         return self.types
 
     def get_rules(self):
-        """Gibt die Matrix zurück (zum Debuggen)."""
+        """Returns the interaction matrix (for debugging)."""
         return self.interaction_matrix

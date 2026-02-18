@@ -1,6 +1,6 @@
 """
-Direkter Vergleich: O(n²) Brute-Force vs. Spatial Hashing + Numba.
-Lässt beide Engines mit gleichen Startbedingungen laufen.
+Direct comparison: O(n2) brute force vs. spatial hashing + Numba.
+Runs both engines with the same initial conditions.
 """
 
 import sys
@@ -16,7 +16,7 @@ from particle_life.legacy.physics_bruteforce import PhysicsEngine as BruteForceE
 from particle_life.physics import PhysicsEngine as OptimizedEngine
 from particle_life.simulation import ParticleSystem
 
-# --- Numba JIT Warmup (einmalig kompilieren) ---
+# Numba JIT warmup (compile once)
 print("Numba JIT Warmup...", end=" ", flush=True)
 np.random.seed(config.SEED)
 warmup_sim = ParticleSystem(n_particles=50)
@@ -27,12 +27,12 @@ print("fertig.\n")
 
 
 def bench(engine_cls, n_particles, n_steps=30):
-    """Misst ms/step für eine Engine."""
+    """Measure ms/step for an engine."""
     np.random.seed(config.SEED)
     sim = ParticleSystem(n_particles=n_particles)
     engine = engine_cls(n_particles)
 
-    # Warmup (Numba ist jetzt schon kompiliert)
+    # Warmup (Numba is already compiled now)
     for _ in range(5):
         engine.step(sim, config.DT)
 
@@ -46,7 +46,7 @@ def bench(engine_cls, n_particles, n_steps=30):
 
 
 print("=" * 65)
-print("  Vergleich: Brute-Force O(n²) vs. Spatial Hashing O(n)")
+print("  Vergleich: Brute-Force O(n2) vs. Spatial Hashing O(n)")
 print("=" * 65)
 print()
 print(f"  {'Partikel':>8} | {'Brute-Force':>14} | {'Optimiert':>14} | {'Speedup':>8}")

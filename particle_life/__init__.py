@@ -1,4 +1,4 @@
-"""Documentation about python_package."""
+"""Particle Life simulation package with physics engine and visualization."""
 import logging
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())

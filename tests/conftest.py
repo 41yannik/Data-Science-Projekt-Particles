@@ -8,8 +8,8 @@ from particle_life.simulation import ParticleSystem
 @pytest.fixture
 def small_particle_system():
     """
-    Erstellt ein ParticleSystem mit nur 10 Partikeln und festem Random-Seed.
-    Dadurch sind die 'zufälligen' Positionen bei jedem Testlauf exakt gleich.
+    Create a ParticleSystem with only 10 particles and fixed random seed.
+    This makes the random positions exactly the same on each test run.
     """
     # 1. Random Seed setzen: WICHTIG für reproduzierbare Tests!
     # Sonst schlagen Tests fehl, nur weil ein Partikel zufällig woanders startete.
@@ -29,8 +29,8 @@ def small_particle_system():
 @pytest.fixture
 def interaction_matrix_fixed():
     """
-    Erzeugt eine einfache, feste Interaktionsmatrix für Tests.
-    Z.B. 2 Typen: Typ 0 zieht Typ 1 an.
+    Create a simple fixed interaction matrix for tests.
+    Example: 2 types where type 0 attracts type 1.
     """
     # Beispiel: 2x2 Matrix für 2 Partikeltypen
     matrix = np.array([

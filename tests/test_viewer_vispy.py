@@ -162,7 +162,7 @@ def test_vispy_viewer_poc_and_escape(monkeypatch):
     viewer = vv.VispyViewer(sim=None)
 
     assert viewer.is_poc is True
-    assert "PoC Modus" in viewer.info_text.text
+    assert "PoC Mode" in viewer.info_text.text
 
     viewer._on_key_press(SimpleNamespace(key="Escape"))
     viewer._on_key_press(SimpleNamespace(key="F"))
