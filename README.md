@@ -81,7 +81,7 @@ flowchart TD
   * **[x] Milestone 2 (17.12.2025):** Core Logic Implementation (Physics & Interaction Matrix).
   * **[x] Milestone 3 (17.12.2025):** Real-time Visualization & Parameter Tuning.
   * **[x] Milestone 4 (Completed):** Performance Optimization (>2000 particles).
-  * **[ ] Milestone 5 (25.02.2026):** Final Release, Documentation & Presentation.
+  * **[x] Milestone 5 (25.02.2026):** Final Release, Documentation & Presentation.
 
 ---
 
